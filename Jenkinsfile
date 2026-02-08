@@ -14,6 +14,11 @@ pipeline {
             steps {
                 sh 'mvn clean package'
             }
+        }
+        stage('docker image') {
+            steps {
+                sh 'docker build -t jk1995/maven-app:latest .'
+            }
         }   
     }
 }        
