@@ -2,28 +2,18 @@ pipeline {
     agent any
     
     tools{
-        maven 'Maven-3.9.9'
+        maven 'maven-new'
     }
     stages {
         stage('clone') {
             steps {
-              git 'https://github.com/ashokitschool/maven-web-app.git'
+                checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/jai250/maven-web-app-ashokit.git']])
             }
         }
-        stage('build'){
-            steps{
-                 sh 'mvn clean package'
-            }
-        }
-        stage('docker image'){
+        stage('build') {
             steps {
-                sh 'docker build -t ashokit/mavenwebapp .'
+                sh 'mvn clean package'
             }
-        }
-        stage('k8s deploy'){
-            steps{
-               sh 'kubectl apply -f k8s-deploy.yml'
-            }
-        }
+        }   
     }
-}
+}        
