@@ -19,6 +19,9 @@ pipeline {
             steps {
                 sh 'docker build -t jk1995/maven-app:latest .'
             }
-        }   
+        }
+        stage('k8s deployment') {
+            steps {
+                sh 'kubectl apply -f k8s-deploy.yml'   
     }
 }        
