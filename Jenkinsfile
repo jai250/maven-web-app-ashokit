@@ -38,7 +38,8 @@ pipeline {
         stage('deploy to kubernetes') {
             steps {
                 sh 'kubectl apply -f k8s-deployment.yaml'
-            } 
+            }
+        }     
     }
 }    
                 
