@@ -2,10 +2,8 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_USERNAME = credentials('dockerhub-username')
-        DOCKERHUB_PASSWORD = credentials('dockerhub-password')
         DOCKERHUB_IMAGE = 'jk1995/maven-app'
-        DOCKERHUB_TAG = 'BUILD_NUMBER'
+        DOCKERHUB_TAG = "${BUILD_NUMBER}"
     }
     
     tools{
@@ -26,4 +24,16 @@ pipeline {
             steps {
                 sh 'docker build -t $DOCKERHUB_IMAGE:$DOCKERHUB_TAG .'
             }
-        }        
+        }
+        stage('docker-push') {
+            steps {
+                withCredentials([usernamePassword(credentialsId: 'docker-token', passwordVariable: 'docker_password', usernameVariable: 'docker_user')]) {
+                    sh 'echo $docker_password | docker login -u $docker_user --password-stdin'
+                    sh 'docker push $DOCKERHUB_IMAGE:$DOCKERHUB_TAG'
+                }
+               
+            }
+        }
+    }
+}    
+                
