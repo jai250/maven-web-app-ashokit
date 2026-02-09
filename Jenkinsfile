@@ -1,5 +1,12 @@
 pipeline {
     agent any
+
+    environment {
+        DOCKERHUB_USERNAME = credentials('dockerhub-username')
+        DOCKERHUB_PASSWORD = credentials('dockerhub-password')
+        DOCKERHUB_REPO = 'jk1995/maven-app'
+        DOCKERHUB_TAG = 'BUILD_NUMBER'
+    }
     
     tools{
         maven 'maven-new'
@@ -17,6 +24,6 @@ pipeline {
         }
         stage('docker-build') {
             steps {
-                sh 'docker build -t jk1995/maven-app:latest .'
+                sh 'docker build -t $DOCKERHUB_REPO:$DOCKERHUB_TAG .'
             }
         }        
